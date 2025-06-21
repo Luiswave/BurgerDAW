@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:replace="~{base :: titulo}">Título de la página</title>
+</head>
+<body>
+  <div th:replace="~{base :: cabecera}">Cabecera</div>
+
+  <div th:replace="~{base :: menu}">Menú de opciones</div>
+
+  <h2>Ingredientes</h2>
+
+  <div id="toggle" th:if="${error}"
+        style="background-color: pink; border: 1px solid red; margin: 1em">
+    <span th:text="${mensaje}">Se ha producido un error.</span>
+    <a href="#"
+        onclick="document.getElementById('toggle').style.display = 'none';">
+      [Cerrar]
+    </a>
+  </div>
+
+  <div style="margin: 1em">
+    <a th:href="@{nuevo/item}">Nuevo</a>
+  </div>
+
+  <table style="background: black; border-spacing: 1px">
+    <thead style="background: lightgray">
+      <tr>
+        <th>Id</th>
+        <th>Descripción</th>
+        <th>Peso</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody style="background: white">
+      <tr th:each="ingrediente : ${listaIngredientes}" th:object="${ingrediente}">
+        <td th:text="*{id}">1</td>
+        <td th:text="*{descripcion}">Queso</td>
+        <td th:text="*{peso}">25</td>
+        <td>
+          <a th:href="@{{id}(id=*{id})}">Ver</a>, 
+          <a th:href="@{editar/{id}(id=*{id})}">Editar</a>, 
+          <a th:href="@{borrar/{id}(id=*{id})}">Borrar</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin: 1em">
+    <a th:href="@{..}">Regresar</a>
+  </div>
+</body>
+</html>

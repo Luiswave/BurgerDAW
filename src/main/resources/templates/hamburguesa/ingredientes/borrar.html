@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:replace="~{base :: titulo}">Título de la página</title>
+</head>
+<body>
+  <div th:replace="~{base :: cabecera}">Cabecera</div>
+
+  <div th:replace="~{base :: menu}">Menú de opciones</div>
+
+  <h2>Hambuguesas | Borrar | Ingrediente</h2>
+
+  <div th:object="${ingrediente}" style="border: 1px solid black; padding: 1em">
+    <p><span style="font-weight: bold">Id: </span><span th:text="*{id}">1</span></p>
+    <p><span style="font-weight: bold">Descripción: </span><span th:text="*{descripcion}">Queso</span></p>
+    <p><span style="font-weight: bold">Peso: </span><span th:text="*{peso}">25</span></p>
+  </div>
+
+  <div th:object="${ingrediente}" style="margin: 1em">
+    <p style="color: red;">¿Está seguro de borrar el objeto?</p>
+    [ <a th:href="@{../../{idh}(idh=${idHamburguesa})}">No</a> | <a th:href="@{/hamburguesa/ingredientes/{idh}/borrar-definitivamente/{idi}(idh=${idHamburguesa},idi=*{id})}">Sí</a> ]
+  </div>
+</body>
+</html>

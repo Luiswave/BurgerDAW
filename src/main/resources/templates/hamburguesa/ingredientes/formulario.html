@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:replace="~{base :: titulo}">Título de la página</title>
+</head>
+<body>
+  <div th:replace="~{base :: cabecera}">Cabecera</div>
+
+  <div th:replace="~{base :: menu}">Menú de opciones</div>
+
+  <h2>Hamburguesa | Ingredientes | <span th:text="${lineaIngrediente.idIngredienteActual} ? 'Editar' : 'Nuevo'">Editar</span></h2>
+
+  <div th:object="${hamburguesa}" style="border: 1px solid black; padding: 1em">
+    <p><span style="font-weight: bold">Id: </span><span th:text="*{id}">1</span></p>
+    <p><span style="font-weight: bold">Descripción: </span><span th:text="*{nombre}">Clásica</span></p>
+    <p><span style="font-weight: bold">Peso: </span><span th:text="*{#numbers.formatCurrency(precio)}">3.50 €</span></p>
+    <p><span style="font-weight: bold">Pan: </span><span th:text="*{pan.descripcion}">Sésamo</span></p>
+    <p><span style="font-weight: bold">Gluten: </span><span th:text="*{pan.gluten ? 'Sí' : 'No'}">Sí</span></p>
+  </div>
+
+  <h3>Lista de ingredientes</h3>
+
+  <div id="toggle" th:if="${error}"
+        style="background-color: pink; border: 1px solid red; margin: 1em">
+    <span th:text="${mensaje}">Se ha producido un error.</span>
+    <a href="#"
+        onclick="document.getElementById('toggle').style.display = 'none';">
+      [Cerrar]
+    </a>
+  </div>
+
+  <form th:action="@{enviar}" th:object="${lineaIngrediente}" method="post" style="border: 1px solid black; padding: 1em">
+    <input th:field="*{idIngredienteActual}" id="idIngredienteActual" type="hidden" />
+    <p>
+      <label for="idIngredienteNuevo" style="font-weight: bold">Ingrediente: </label>
+      <select th:field="*{idIngredienteNuevo}" id="idIngredienteNuevo">
+        <option value="-1">---</option>
+        <option th:each="i : ${listaIngredientes}" th:value="${i.id}" th:text="${i.descripcion}">
+          Ingrediente
+        </option>
+      </select>
+    </p>
+    <p>
+      <label for="cantidad" style="font-weight: bold">Cantidad: </label>
+      <input th:field="*{cantidad}" id="cantidad" type="number" min="1" step="1"/>
+    </p>
+
+    <br/>
+    <button type="submit">Aceptar</button>
+  </form>
+
+  <div style="margin: 1em">
+    <a th:href="@{../../{id}(id=${hamburguesa.id})}">Regresar</a>
+  </div>
+</body>
+</html>

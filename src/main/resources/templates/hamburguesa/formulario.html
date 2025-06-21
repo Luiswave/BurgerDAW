@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:replace="~{base :: titulo}">Título de la página</title>
+</head>
+<body>
+  <div th:replace="~{base :: cabecera}">Cabecera</div>
+
+  <div th:replace="~{base :: menu}">Menú de opciones</div>
+
+  <h2>Hamburguesa | <span th:text="${hamburguesa.id} ? 'Editar' : 'Nuevo'">Editar</span></h2>
+
+  <form th:action="@{enviar}" th:object="${hamburguesa}" method="post" style="border: 1px solid black; padding: 1em">
+    <input th:field="*{id}" id="id" type="hidden" />
+    <p>
+      <label for="nombre" style="font-weight: bold">Nombre: </label>
+      <input th:field="*{nombre}" id="nombre" type="text" maxlength="20"/>
+    </p>
+    <p>
+      <label for="precio" style="font-weight: bold">Precio: </label>
+      <input th:field="*{precio}" id="precio" type="number" min="0" step="0.01"/>
+    </p>
+    <p>
+      <label for="pan" style="font-weight: bold">Pan: </label>
+      <select th:field="*{pan}" id="pan">
+        <option value="-1">---</option>
+        <option th:each="p : ${listaPanes}" th:value="${p.id}" th:text="${p.descripcion}">
+          Tipo de pan
+        </option>
+      </select>
+    </p>
+    <!-- Lista de ingredientes -->
+    <p>
+      <label style="font-weight: bold">Ingredientes: </label>
+    </p>
+    <div th:if="*{#lists.isEmpty(cadenaIngredientes)}">
+      No hay ningún ingrediente
+    </div>
+    <div th:if="*{not #lists.isEmpty(cadenaIngredientes)}">
+      <ul th:each="ingrediente : *{#lists.sort(cadenaIngredientes)}">
+        <li th:text="${ingrediente}">1 Queso</li>
+      </ul>
+    </div>
+
+    <br/>
+    <button type="submit">Aceptar</button>
+  </form>
+
+  <div style="margin: 1em">
+    <a th:href="@{..}">Regresar</a>
+  </div>
+</body>
+</html>

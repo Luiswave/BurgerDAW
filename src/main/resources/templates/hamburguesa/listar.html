@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:replace="~{base :: titulo}">Título de la página</title>
+</head>
+<body>
+  <div th:replace="~{base :: cabecera}">Cabecera</div>
+
+  <div th:replace="~{base :: menu}">Menú de opciones</div>
+
+  <h2>Hamburguesas</h2>
+
+  <div id="toggle" th:if="${error}"
+        style="background-color: pink; border: 1px solid red; margin: 1em">
+    <span th:text="${mensaje}">Se ha producido un error.</span>
+    <a href="#"
+        onclick="document.getElementById('toggle').style.display = 'none';">
+      [Cerrar]
+    </a>
+  </div>
+
+  <div style="margin: 1em">
+    <a th:href="@{nuevo/item}">Nueva</a>
+  </div>
+
+  <table style="background: black; border-spacing: 1px">
+    <thead style="background: lightgray">
+      <tr>
+        <th>Id</th>
+        <th>Nombre</th>
+        <th>Pan</th>
+        <th>Gluten</th>
+        <th>Precio</th>
+          <th>Ingredientes</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody style="background: white">
+      <tr th:each="hamburguesa : ${listaHamburguesas}" th:object="${hamburguesa}">
+        <td th:text="*{id}">1</td>
+        <td th:text="*{nombre}">Clásica</td>
+        <td th:text="*{pan.descripcion}">Sésamo</td>
+        <td th:text="*{pan.gluten? 'Sí' : 'No'}">Sí</td>
+        <td th:text="*{precio}">3.50 €</td>
+        <td th:text="*{#lists.sort(cadenaIngredientes)}">Lista de ingredientes</td>
+        <td>
+          <a th:href="@{{id}(id=*{id})}">Ver</a>, 
+          <a th:href="@{editar/{id}(id=*{id})}">Editar</a>, 
+          <a th:href="@{borrar/{id}(id=*{id})}">Borrar</a>,
+          <a th:href="@{ingredientes/{id}(id=*{id})}">Ingredientes</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin: 1em">
+    <a th:href="@{..}">Regresar</a>
+  </div>
+</body>
+</html>

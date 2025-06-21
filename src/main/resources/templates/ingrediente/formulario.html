@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:replace="~{base :: titulo}">Título de la página</title>
+</head>
+<body>
+  <div th:replace="~{base :: cabecera}">Cabecera</div>
+
+  <div th:replace="~{base :: menu}">Menú de opciones</div>
+
+  <h2>Ingredientes | <span th:text="${ingrediente.id} ? 'Editar' : 'Nuevo'">Editar</span></h2>
+
+  <form th:action="@{enviar}" th:object="${ingrediente}" method="post" style="border: 1px solid black; padding: 1em">
+    <input th:field="*{id}" id="id" type="hidden" />
+    <p>
+      <label for="descripcion" style="font-weight: bold">Descripción: </label>
+      <input th:field="*{descripcion}" id="descripcion" type="text" maxlength="15"/>
+    </p>
+    <p>
+      <label for="peso" style="font-weight: bold">Peso: </label>
+      <input th:field="*{peso}" id="peso" type="number" min="1" max="1000" />
+    </p>
+    <button type="submit">Aceptar</button>
+  </form>
+
+  <div style="margin: 1em">
+    <a th:href="@{..}">Regresar</a>
+  </div>
+</body>
+</html>
