@@ -31,9 +31,28 @@ public class HamburguesaServicio {
 		return hamburguesaRepositorio.save(item);
 	}
 
-	public Hamburguesa update(Hamburguesa item) {
-		lanzarExcepcionCuandoNoExiste(item.getId());
-		return hamburguesaRepositorio.save(item);
+	public Hamburguesa update(Hamburguesa hamburguesaActualizada) {
+		// Lanzar excepción si el ID es nulo o la hamburguesa no existe
+		if (hamburguesaActualizada.getId() == null) {
+			throw new HamburguesaException("El ID de la hamburguesa no puede ser nulo para actualizar.");
+		}
+		lanzarExcepcionCuandoNoExiste(hamburguesaActualizada.getId());
+
+		// Obtener la hamburguesa existente de la base de datos
+		Hamburguesa hamburguesaExistente = hamburguesaRepositorio.findById(hamburguesaActualizada.getId()).orElseThrow(() ->
+			new HamburguesaException("No se encontró la hamburguesa con ID: " + hamburguesaActualizada.getId())
+		);
+
+		// Actualizar solo los campos que se pueden modificar desde el formulario
+		hamburguesaExistente.setNombre(hamburguesaActualizada.getNombre());
+		hamburguesaExistente.setPrecio(hamburguesaActualizada.getPrecio());
+		hamburguesaExistente.setPan(hamburguesaActualizada.getPan());
+
+		// No modificar la lista de ingredientes aquí, ya que el formulario actual
+		// no la gestiona. Si se quisiera permitir la modificación de ingredientes,
+		// se necesitaría una lógica adicional para fusionar los cambios.
+
+		return hamburguesaRepositorio.save(hamburguesaExistente);
 	}
 	
 	public void delete(Hamburguesa item) {
